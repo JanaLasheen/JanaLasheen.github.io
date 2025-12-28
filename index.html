@@ -3,38 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Form - No Ifs</title>
+    <title>Modern Storage Form</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; max-width: 400px; margin: auto; }
-        label { display: block; margin-top: 10px; font-weight: bold; }
-        input, textarea { width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box; }
-        button { margin-top: 20px; padding: 10px 20px; cursor: pointer; background-color: #007BFF; color: white; border: none; }
-        button:hover { background-color: #0056b3; }
+        /* 1. Page Background & Font */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        /* 2. The "Card" Container */
+        .container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+            margin-top: 0;
+        }
+
+        /* 3. Input Fields styling */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #666;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box; /* Ensures padding doesn't break width */
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        /* Input Focus Effect (The Blue Glow) */
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+        }
+
+        /* 4. Button Styling */
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #357abd;
+        }
+
+        /* Optional: Visual validation cues */
+        input:valid:not(:placeholder-shown) { border-left: 4px solid #4caf50; }
+        input:invalid:not(:placeholder-shown) { border-left: 4px solid #f44336; }
+
     </style>
 </head>
 <body>
 
-    <h2>User Information</h2>
-    
-    <label>Name:</label>
-    <input type="text" id="name">
+    <div class="container">
+        <h2>Profile Settings</h2>
+        
+        <form onsubmit="saveData(); return false;">
+            
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="name" placeholder="John Doe" required>
+            </div>
 
-    <label>ID:</label>
-    <input type="text" id="userId">
+            <div class="form-group">
+                <label>User ID</label>
+                <input type="number" id="userId" placeholder="12345" required>
+            </div>
 
-    <label>Phone Number:</label>
-    <input type="tel" id="phone">
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="tel" id="phone" placeholder="+1 555-0123" required>
+            </div>
 
-    <label>Email:</label>
-    <input type="email" id="email">
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="email" placeholder="john@example.com" required>
+            </div>
 
-    <label>Address:</label>
-    <textarea id="address" rows="3"></textarea>
+            <div class="form-group">
+                <label>Physical Address</label>
+                <textarea id="address" rows="3" placeholder="123 Main St..." required></textarea>
+            </div>
 
-    <button onclick="saveData()">Save to Storage</button>
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
 
     <script>
-        // 1. SAVE: One line per input
+        // 1. SAVE
         function saveData() {
             localStorage.setItem('savedName', document.getElementById('name').value);
             localStorage.setItem('savedID', document.getElementById('userId').value);
@@ -42,12 +133,20 @@
             localStorage.setItem('savedEmail', document.getElementById('email').value);
             localStorage.setItem('savedAddress', document.getElementById('address').value);
             
-            alert("Data saved!");
+            // Replaced alert with a temporary button text change for a smoother feel
+            const btn = document.querySelector('button');
+            const originalText = btn.innerText;
+            btn.innerText = "Saved!";
+            btn.style.backgroundColor = "#4caf50"; // Green
+            
+            setTimeout(() => {
+                btn.innerText = originalText;
+                btn.style.backgroundColor = "#4a90e2"; // Back to Blue
+            }, 1500);
         }
 
-        // 2. LOAD: Direct assignment (no checks)
+        // 2. LOAD
         function loadData() {
-            // If storage is empty, this assigns "null" (which browsers treat as empty for inputs)
             document.getElementById('name').value = localStorage.getItem('savedName') || "";
             document.getElementById('userId').value = localStorage.getItem('savedID') || "";
             document.getElementById('phone').value = localStorage.getItem('savedPhone') || "";
@@ -55,7 +154,6 @@
             document.getElementById('address').value = localStorage.getItem('savedAddress') || "";
         }
 
-        // Run immediately
         loadData();
     </script>
 
