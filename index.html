@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Data Form</title>
+    <title>Auto-Save Data Form</title>
     <style>
         body {
             font-family: sans-serif;
@@ -23,32 +23,34 @@
             max-width: 400px;
         }
         h2 { text-align: center; margin-bottom: 1.5rem; color: #333; }
-        .form-group { margin-bottom: 1rem; }
+        .form-group { margin-bottom: 1rem; position: relative; }
         label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
         input, textarea {
             width: 100%;
             padding: 8px;
-            box-sizing: border-box; /* Ensures padding doesn't affect width */
+            box-sizing: border-box;
             border: 1px solid #ccc;
             border-radius: 4px;
+            transition: border-color 0.3s;
         }
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: lightPink;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1rem;
-            margin-top: 10px;
+        /* Visual cue when a field is focused */
+        input:focus, textarea:focus {
+            border-color: #28a745;
+            outline: none;
         }
-        button:hover { background-color: pink; }
         #status {
             text-align: center;
-            margin-top: 10px;
-            color: green;
-            height: 20px; /* Reserve space */
+            margin-top: 15px;
+            color: #28a745;
+            font-size: 0.9rem;
+            min-height: 20px;
+            font-weight: 500;
+        }
+        .small-note {
+            font-size: 0.75rem;
+            color: #666;
+            text-align: center;
+            margin-bottom: 1rem;
         }
     </style>
 </head>
@@ -56,6 +58,8 @@
 
 <div class="container">
     <h2>User Information</h2>
+    <p class="small-note">Changes are saved automatically as you type.</p>
+    
     <form id="userForm">
         <div class="form-group">
             <label for="name">Name:</label>
@@ -81,48 +85,29 @@
             <label for="address">Address:</label>
             <textarea id="address" rows="3"></textarea>
         </div>
-
-        <button type="submit">Save Info</button>
+        
         <p id="status"></p>
     </form>
 </div>
 
 <script>
-    const form = document.getElementById('userForm');
-    const statusMsg = document.getElementById('status');
+   function saveData() {
+        localStorage.setItem("name", document.getElementById("name").value);
+        localStorage.setItem("userId", document.getElementById("userId").value);
+        localStorage.setItem("phone", document.getElementById("phone").value);
+        localStorage.setItem("email", document.getElementById("email").value);
+        localStorage.setItem("address", document.getElementById("address").value);
+        alert("Data saved successfully!");
+    }
 
-    // 1. Load data from Local Storage when the page opens
-    window.addEventListener('load', () => {
-        const savedData = localStorage.getItem('userData');
-        if (savedData) {
-            const data = JSON.parse(savedData);
-            document.getElementById('name').value = data.name || '';
-            document.getElementById('userId').value = data.userId || '';
-            document.getElementById('phone').value = data.phone || '';
-            document.getElementById('email').value = data.email || '';
-            document.getElementById('address').value = data.address || '';
-        }
-    });
+    function loadData() {
+        document.getElementById("name").value = localStorage.getItem("name") || "";
+        document.getElementById("userId").value = localStorage.getItem("userId") || "";
+        document.getElementById("phone").value = localStorage.getItem("phone") || "";
+        document.getElementById("email").value = localStorage.getItem("email") || "";
+        document.getElementById("address").value = localStorage.getItem("address") || "";
+    }
 
-    // 2. Save data to Local Storage when the form is submitted
-    form.addEventListener('submit', (e) => {
-        e.preventDefault(); // Prevents the page from refreshing
-
-        const formData = {
-            name: document.getElementById('name').value,
-            userId: document.getElementById('userId').value,
-            phone: document.getElementById('phone').value,
-            email: document.getElementById('email').value,
-            address: document.getElementById('address').value
-        };
-
-        // Local Storage only accepts strings, so we use JSON.stringify
-        localStorage.setItem('userData', JSON.stringify(formData));
-
-        // Visual feedback
-        statusMsg.innerText = "Data Saved Successfully!";
-        setTimeout(() => { statusMsg.innerText = ""; }, 2000);
-    });
 </script>
 
 </body>
