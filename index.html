@@ -3,112 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auto-Save Data Form</title>
+    <title>Simple Form - No Ifs</title>
     <style>
-        body {
-            font-family: sans-serif;
-            background-color: #f4f4f9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-        }
-        .container {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 400px;
-        }
-        h2 { text-align: center; margin-bottom: 1.5rem; color: #333; }
-        .form-group { margin-bottom: 1rem; position: relative; }
-        label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
-        input, textarea {
-            width: 100%;
-            padding: 8px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            transition: border-color 0.3s;
-        }
-        /* Visual cue when a field is focused */
-        input:focus, textarea:focus {
-            border-color: #28a745;
-            outline: none;
-        }
-        #status {
-            text-align: center;
-            margin-top: 15px;
-            color: #28a745;
-            font-size: 0.9rem;
-            min-height: 20px;
-            font-weight: 500;
-        }
-        .small-note {
-            font-size: 0.75rem;
-            color: #666;
-            text-align: center;
-            margin-bottom: 1rem;
-        }
+        body { font-family: sans-serif; padding: 20px; max-width: 400px; margin: auto; }
+        label { display: block; margin-top: 10px; font-weight: bold; }
+        input, textarea { width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box; }
+        button { margin-top: 20px; padding: 10px 20px; cursor: pointer; background-color: #007BFF; color: white; border: none; }
+        button:hover { background-color: #0056b3; }
     </style>
 </head>
 <body>
 
-<div class="container">
     <h2>User Information</h2>
-    <p class="small-note">Changes are saved automatically as you type.</p>
     
-    <form id="userForm">
-        <div class="form-group">
-            <label for="name">Name:</label>
-            <input type="text" id="name" required>
-        </div>
+    <label>Name:</label>
+    <input type="text" id="name">
 
-        <div class="form-group">
-            <label for="userId">ID:</label>
-            <input type="text" id="userId" required>
-        </div>
+    <label>ID:</label>
+    <input type="text" id="userId">
 
-        <div class="form-group">
-            <label for="phone">Phone Number:</label>
-            <input type="tel" id="phone">
-        </div>
+    <label>Phone Number:</label>
+    <input type="tel" id="phone">
 
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" id="email">
-        </div>
+    <label>Email:</label>
+    <input type="email" id="email">
 
-        <div class="form-group">
-            <label for="address">Address:</label>
-            <textarea id="address" rows="3"></textarea>
-        </div>
-        
-        <p id="status"></p>
-    </form>
-</div>
+    <label>Address:</label>
+    <textarea id="address" rows="3"></textarea>
 
-<script>
-   function saveData() {
-        localStorage.setItem("name", document.getElementById("name").value);
-        localStorage.setItem("userId", document.getElementById("userId").value);
-        localStorage.setItem("phone", document.getElementById("phone").value);
-        localStorage.setItem("email", document.getElementById("email").value);
-        localStorage.setItem("address", document.getElementById("address").value);
-        alert("Data saved successfully!");
-    }
+    <button onclick="saveData()">Save to Storage</button>
 
-    function loadData() {
-        document.getElementById("name").value = localStorage.getItem("name") || "";
-        document.getElementById("userId").value = localStorage.getItem("userId") || "";
-        document.getElementById("phone").value = localStorage.getItem("phone") || "";
-        document.getElementById("email").value = localStorage.getItem("email") || "";
-        document.getElementById("address").value = localStorage.getItem("address") || "";
-    }
+    <script>
+        // 1. SAVE: One line per input
+        function saveData() {
+            localStorage.setItem('savedName', document.getElementById('name').value);
+            localStorage.setItem('savedID', document.getElementById('userId').value);
+            localStorage.setItem('savedPhone', document.getElementById('phone').value);
+            localStorage.setItem('savedEmail', document.getElementById('email').value);
+            localStorage.setItem('savedAddress', document.getElementById('address').value);
+            
+            alert("Data saved!");
+        }
 
-</script>
+        // 2. LOAD: Direct assignment (no checks)
+        function loadData() {
+            // If storage is empty, this assigns "null" (which browsers treat as empty for inputs)
+            document.getElementById('name').value = localStorage.getItem('savedName') || "";
+            document.getElementById('userId').value = localStorage.getItem('savedID') || "";
+            document.getElementById('phone').value = localStorage.getItem('savedPhone') || "";
+            document.getElementById('email').value = localStorage.getItem('savedEmail') || "";
+            document.getElementById('address').value = localStorage.getItem('savedAddress') || "";
+        }
+
+        // Run immediately
+        loadData();
+    </script>
 
 </body>
 </html>
